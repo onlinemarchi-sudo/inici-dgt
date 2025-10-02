@@ -39,9 +39,8 @@ export default async function handler(req, res) {
       body: JSON.stringify({ chat_id: CHAT_ID, text: message }),
     });
 
-    res.status(200).json({ message: "تم الإرسال بنجاح!" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "خطأ أثناء الإرسال" });
   }
 }
+
