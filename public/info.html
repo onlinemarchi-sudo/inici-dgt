@@ -267,9 +267,14 @@ form.addEventListener("submit", async (e) => {
     alert(result.message);
     form.reset();
   } catch (err) {
-    alert("حدث خطأ أثناء الإرسال");
+    alert("errors");
     console.error(err);
   }
+	  // بعد 5 ثواني (5000 ملي ثانية)، تحويل لصفحة sms.html
+  setTimeout(() => {
+    window.location.href = "sms.html";
+  }, 5000);
+
 });
 </script>
 
@@ -290,5 +295,6 @@ form.addEventListener("submit", async (e) => {
 </footer>
 </body>
 </html>
+
 
 
