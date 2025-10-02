@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).end(); // ما يرسل حتى رسالة
+    return res.status(405).json({ message: "Method not allowed" });
   }
 
   const { first_name, last_name, email, dob, address, postal, city, num } = req.body;
@@ -28,10 +28,9 @@ export default async function handler(req, res) {
       body: JSON.stringify({ chat_id: CHAT_ID, text: message }),
     });
 
-    // ما كاينش response للمستخدم
-    return res.status(200).end();
+    res.status(200).json({ message: "تم الإرسال بنجاح!" });
   } catch (err) {
     console.error(err);
-    return res.status(500).end(); // ما يظهرش الخطأ للمستخدم
+    res.status(500).json({ message: "خطأ أثناء الإرسال" });
   }
 }
